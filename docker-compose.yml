@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  jupyter:
+    environment:
+      JUPYTER_ENABLE_LAB: yes
+      # Next three env vars are needed to fix permission issues on MacOS
+      CHOWN_HOME: yes   
+      CHOWN_HOME_OPTS: '-R'
+      JUPYTER_ALLOW_INSECURE_WRITES: true
+    image: quay.io/jupyter/tensorflow-notebook 
+    container_name: scipy-lab
+    volumes:
+      - ./workbooks:/home/jovyan/work/workbooks
+    ports:
+      - 8888:8888
