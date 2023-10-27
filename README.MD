@@ -1,1 +1,9 @@
-PermissionError: [Errno 13] Permission denied: '/home/jovyan/.local'
+# Repository to try out Advent of Code puzzles
+
+## Reference
+
+https://adventofcode.com/
+
+## Approach
+
+Using this to improve python skills and keep 
