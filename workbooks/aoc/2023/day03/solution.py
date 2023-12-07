@@ -51,7 +51,7 @@ def process_line(engine: list[str], index: int) -> int:
     start_index = None
     end_index = None
 
-    print(f'process_line {index=}')
+    #print(f'process_line {index=}')
     
     part_sum = 0
 
@@ -89,24 +89,24 @@ def extract_touching_numbers(engine: list[str], gear_index: int, check_index: in
     end_index = None
     numbers=[]
 
-    print(f'extract_touching_numbers {gear_index=} {check_index=} {engine[check_index]=}')
+    #print(f'extract_touching_numbers {gear_index=} {check_index=} {engine[check_index]=}')
     
     for c in range(len(engine[check_index])):
-        # print(f'A {c=} {engine[check_index][c]=} {start_index=} {end_index=} {gear_index=}')
+        # #print(f'A {c=} {engine[check_index][c]=} {start_index=} {end_index=} {gear_index=}')
         if engine[check_index][c].isdigit():
-            # print(f'B Found digit {c=} {engine[check_index][c]=}')
+            # #print(f'B Found digit {c=} {engine[check_index][c]=}')
             if start_index == None:
                 start_index = c
                 end_index = c
             else:
                 end_index = c
         elif start_index != None and end_index != None:
-            # print(f'C Found non-digit {c=} {engine[check_index][c]=} {start_index=} {end_index=} {gear_index=}')
+            # #print(f'C Found non-digit {c=} {engine[check_index][c]=} {start_index=} {end_index=} {gear_index=}')
             if (
                 (start_index <= gear_index and end_index >= gear_index  ) or
                 (start_index == gear_index + 1 or end_index == gear_index - 1 )
             ):
-                # print(f'D {start_index=} {end_index=} {gear_index=} {engine[check_index]=}')
+                # #print(f'D {start_index=} {end_index=} {gear_index=} {engine[check_index]=}')
                 numbers.append(int(engine[check_index][start_index:end_index+1]))
             start_index = None
             end_index = None
@@ -125,36 +125,38 @@ def get_gear_parts(engine: list[str], engine_index: int, gear_index: int) -> lis
     parts=[]
     row_length = len(engine[engine_index])
 
-    print(f'get_gear_parts(): {engine[engine_index]=} {gear_index=} {engine[engine_index-1]=} {engine[engine_index+1]=}')
+    #print(f'get_gear_parts(): {engine[engine_index]=} {engine_index=} {gear_index=} {engine[engine_index-1]=} {engine[engine_index+1]=}')
     
     # check line above
     if engine_index > 0:
         parts.extend(extract_touching_numbers(engine, gear_index, engine_index-1))
-        print(f'get_gear_parts above {parts=}')
+        #print(f'get_gear_parts above {parts=}')
     
     # check line below
     if engine_index + 1 < row_length:
         parts.extend(extract_touching_numbers(engine, gear_index, engine_index+1))
-        print(f'get_gear_parts below {parts=}')
+        #print(f'get_gear_parts below {parts=}')
     
     # check before
     test_idx = gear_index - 1
     if test_idx >= 0 and engine[engine_index][test_idx].isdigit():
         while test_idx >= 0 and engine[engine_index][test_idx].isdigit():
-            print(f'{test_idx=} {engine[engine_index][test_idx]=}')
+            #print(f'{test_idx=} {engine[engine_index][test_idx]=}')
             test_idx -= 1
         parts.append(int(engine[engine_index][test_idx+1:gear_index]))
-        print(f'get_gear_parts left {parts=}')
+        #print(f'get_gear_parts left {parts=}')
     
     # check after
     test_idx = gear_index + 1
     if test_idx < row_length and engine[engine_index][test_idx].isdigit():
+        #print(f'Start after loop {test_idx=} {engine[engine_index][test_idx]=}')
         while test_idx < row_length and engine[engine_index][test_idx].isdigit():
             test_idx += 1
-        parts.extend(int(engine[engine_index][test_idx:gear_index]))
-        print(f'get_gear_parts right {parts=}')
+            #print(f'>>> {test_idx=} {engine[engine_index][test_idx]=}')
+        parts.append(int(engine[engine_index][gear_index+1:test_idx]))
+        #print(f'get_gear_parts right {parts=}')
     
-    print(f'get_gear_parts returning {parts=}')
+    #print(f'get_gear_parts returning {parts=}')
     return parts
     
 def process_gear(engine: list[str], index: int):
@@ -163,7 +165,7 @@ def process_gear(engine: list[str], index: int):
         if c == '*':
             parts = get_gear_parts(engine, index, i)
             if len(parts) == 2:
-                print(f'{parts=}')
+                #print(f'{parts=}')
                 sum += prod(parts)
     return sum
 
