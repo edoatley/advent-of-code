@@ -17,8 +17,12 @@ class TestDay05(unittest.TestCase):
     #     self.assertEqual(solution.map_seed(100, mappings), 100)
 
 
-    def test_solve(self):
-        self.assertEqual(solution.solve("test.txt"), 35)
+    # def test_solve(self):
+        # self.assertEqual(solution.solve("test.txt"), 35)
+
+
+    def test_solve2(self):
+        self.assertEqual(solution.solve2("test.txt"), 46)
 
 
 unittest.main()
