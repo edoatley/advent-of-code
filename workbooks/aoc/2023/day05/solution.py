@@ -1,68 +1,76 @@
-def process_map_line(line : str) -> (int, int, int):
-    dest, source, length = [int(s) for s in line.split(' ')]
+def process_map_line(line: str) -> (int, int, int):
+    dest, source, length = [int(s) for s in line.split(" ")]
     delta = dest - source
     return (int(source), int(source) + int(length), delta)
+
 
 def read_file_data_structure(filename: str) -> (list[int], list[list]):
     seeds = None
     maps = []
     maps_index = -1
-    
+
     with open(filename, "r") as f:
         for original_line in f.readlines():
             line = original_line.strip()
             # print(f'{line=}')
-            if line == '':
+            if line == "":
                 # print('Skipping blank line')
                 continue
-            elif line.startswith('seeds: '):
-                seeds = [int(s) for s in line.split(':')[1].strip().split(' ')]
+            elif line.startswith("seeds: "):
+                seeds = [int(s) for s in line.split(":")[1].strip().split(" ")]
                 # print(f'Found seeds {seeds=}')
-            elif 'map:' in line:
+            elif "map:" in line:
                 # print(f'Found map {line=}')
                 maps_index += 1
                 maps.append([])
             else:
                 # print(f'Adding map entry {line=} {maps_index=} {maps=}')
                 maps[maps_index].append(process_map_line(line.strip()))
-    
+
     return seeds, maps
 
+
 def read_file_data_structure_to_ranges(filename: str) -> list[list]:
-    ranges=[]
-    index = 0
-    
+    ranges = None
+    index = None
+
     with open(filename, "r") as f:
         for original_line in f.readlines():
             line = original_line.strip()
-            if line == '':
+            # print(f"{line=}")
+            if line == "":
                 continue
-            elif line.startswith('seeds: '):
+            elif line.startswith("seeds: "):
+                ranges = [[]]
+                index = 0
                 # iterate seeds 2 at a time
-                seeds = [int(s) for s in line.split(':')[1].strip().split(' ')]
+                seeds = [int(s) for s in line.split(":")[1].strip().split(" ")]
                 for i in range(0, len(seeds), 2):
                     ss = seeds[i]
-                    se = ss + seeds[i+1]
+                    se = ss + seeds[i + 1]
                     ds = seeds[i]
-                    de = ss + seeds[i+1]
+                    de = ss + seeds[i + 1]
                     delta = ds - ss
                     ranges[index].append((ss, se, ds, de, delta))
-                # prepare for mappings
-                index = 1
-                ranges.append([])
-            elif 'map:' in line:
+
+                # print(f'added seeds {ranges=}')
+            elif "map:" in line:
                 index += 1
                 ranges.append([])
+                # print(f'added map {ranges=}')
             else:
-                ds, ss, length = [int(s) for s in line.strip().split(' ')]
+                ds, ss, length = [int(s) for s in line.strip().split(" ")]
                 se = ss + length
                 de = ss + length
                 delta = ds - ss
+                # print(f'adding map entry {(ss, se, ds, de, delta)=}')
                 ranges[index].append((ss, se, ds, de, delta))
-    
+
+    # print(f"{ranges=}")
     return ranges
-                    
-def map_seed(seed : int, maps : list[list]) -> int:
+
+
+def map_seed(seed: int, maps: list[list]) -> int:
     mappings = [seed]
 
     for map in maps:
@@ -75,7 +83,7 @@ def map_seed(seed : int, maps : list[list]) -> int:
 
     # print(f'Created {mappings=} from {seed=} and {maps=}')
     return mappings[-1]
-                
+
 
 def solve(filename: str):
     seeds, maps = read_file_data_structure(filename)
@@ -83,26 +91,30 @@ def solve(filename: str):
 
     for s in seeds:
         location = map_seed(s, maps)
-        print(f'{s=} ==> {location=}')
+        print(f"{s=} ==> {location=}")
         locations.append(location)
-    
+
     return min(locations)
-            
 
 
-   # think we need to be clever and start with the locations ranked in order desc and then test to see 
-   # if there is a way to have a seed that matches the requirements
+# think we need to be clever and start with the locations ranked in order desc and then test to see
+# if there is a way to have a seed that matches the requirements
 def solve2(filename: str):
-    ranges = read_file_data_structure_to_ranges(filename) 
+    ranges = read_file_data_structure_to_ranges(filename)
+    
     # iterate last entry of ranges in order of the 2nd tuple entry (destination start)
-    for location in sorted(ranges[-1], key=lambda x: x[2]):
-        valid = find_valid_paths(ranges[:-1], (location[0], location[1]), len(ranges[:-1]) - 1)
+    for l in sorted(ranges[-1], key=lambda x: x[2]):
+        valid = find_valid_paths(
+            list(reversed(ranges[:-1])), (l[0], l[1]), len(ranges[:-1]) - 1
+        )
         if valid:
-            print(f'Found valid path {valid=}')
-            return location[2]
-            
+            print(f"Found valid path {valid=}")
+            return l[2]
+
 
 def find_valid_paths(ranges: list[list], location: tuple, index: int) -> bool:
+    print(f'{location=} {index=} {ranges[index]=}')
+    
     for r in ranges[index]:
         if location[0] >= r[0] and location[1] <= r[1]:
             if index == 0:
@@ -110,5 +122,6 @@ def find_valid_paths(ranges: list[list], location: tuple, index: int) -> bool:
             else:
                 return find_valid_paths(ranges, (r[2], r[3]), index - 1)
 
+
 if __name__ == "__main__":
-    print(solve2('input.txt'))
+    print(solve2("input.txt"))
