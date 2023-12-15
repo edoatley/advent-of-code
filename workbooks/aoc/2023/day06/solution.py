@@ -25,9 +25,12 @@ def solve(filename: str):
     return prod([len(x) for x in results])
 
 
-def solve2(filename: str):
-    pass
-
+def solve2():
+    t = 52947594
+    d = 426137412791216
+    combos = calculate_winning_combinations(t, d)
+    print(f'{len(combos)=}')
 
 if __name__ == "__main__":
-    print(solve("input.txt"))
+    # print(solve("input.txt"))
+    print(solve2())
