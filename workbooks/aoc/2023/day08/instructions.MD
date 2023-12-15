@@ -11,7 +11,7 @@ After examining the maps for a bit, two nodes stick out: AAA and ZZZ. You feel l
 This format defines each node of the network individually. For example:
 
 RL
-
+012345678910123
 AAA = (BBB, CCC)
 BBB = (DDD, EEE)
 CCC = (ZZZ, GGG)
