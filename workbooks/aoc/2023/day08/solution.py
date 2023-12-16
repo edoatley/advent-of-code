@@ -33,8 +33,17 @@ def solve(filename: str) -> int:
 
 
 def solve2(filename: str):
-    pass
-
+    locs, mappings = parse(filename)
+    starts = [k for k in list(mappings.keys()) if k.endswith('A')]
+    pos = starts
+    moves = 0
+    for iter in range(100):
+        for d in locs:
+            for i, p in enumerate(pos):
+                pos[i] = mappings[p][0] if d == 'L' else mappings[p][1]
+            moves += 1
+            if len([x for x in pos if not x.endswith('Z')]) != 0:
+                return moves
 
 if __name__ == "__main__":
     print(solve("input.txt"))

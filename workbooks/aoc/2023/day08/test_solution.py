@@ -23,8 +23,8 @@ class TestDay(unittest.TestCase):
         self.assertEqual(solution.solve("test2.txt"), 6)
 
 
-    # def test_solve(self):
-    #     self.assertEqual(solution.solve("test.txt"), None)
+    def test_solve2(self):
+        self.assertEqual(solution.solve2("test3.txt"), 6)
 
 
 unittest.main()
