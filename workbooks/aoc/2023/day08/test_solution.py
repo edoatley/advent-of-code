@@ -17,7 +17,13 @@ class TestDay(unittest.TestCase):
         self.assertEqual(actual_directions, 'RL')
         self.assertEqual(actual_map, expected_map)
 
-
+    def test_all_z_end(self):
+        self.assertEqual(solution.all_z_end(['VNZ', 'NSZ', 'BSZ']), True)
+        self.assertEqual(solution.all_z_end(['VNZ', 'NSZ', 'BSA']), False)
+        self.assertEqual(solution.all_z_end(['VNZ', 'NSC', 'BSB']), False)
+        self.assertEqual(solution.all_z_end(['VNA', 'NSC', 'BSB']), False)
+    
+    
     def test_solve(self):
         self.assertEqual(solution.solve("test.txt"), 2)
         self.assertEqual(solution.solve("test2.txt"), 6)
